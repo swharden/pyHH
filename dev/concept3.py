@@ -6,49 +6,55 @@ Inspired by matlab code on "andy's brain blog" Oct 15 2013.
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Simulation time (milliseconds)
+# Simulation time (all time units are milliseconds)
 simulationTime = 200
 deltaT = .01
 pointsPerMillisec = 1.0/deltaT
 t = np.arange(simulationTime/deltaT) * deltaT
 
-# Externally applied current across time (Suggested values: 3, 20, 50, 1000)
+# Create the stimulus waveform
 I = np.zeros(len(t))
-indexPulseStart = int(100 * pointsPerMillisec)
-indexPulseEnd = int(150 * pointsPerMillisec)
-I[indexPulseStart:indexPulseEnd] = 50
 
-# Kinetics (Table 3)
+# Add some square pulses to the stimulus waveform
+I[int(125 * pointsPerMillisec):int(175 * pointsPerMillisec)] = 50
+I[int(25 * pointsPerMillisec):int(75 * pointsPerMillisec)] = 10
+
+# channel conductances (mS/cm^2)
 gK = 36
 gNa = 120
 g_L = .3
+
+# ion reversal potentials (mV)
 E_K = -12
 E_Na = 115
 E_L = 10.6
-C = 1
+
+# membrane properties
+C = 1.0  # capacitance (uF/cm^2)
+
+# Open state over time (start at zero)
+n = np.zeros(len(t))
+m = np.zeros(len(t))
+h = np.zeros(len(t))
+V = np.zeros(len(t))
 
 # Initial States
-V = 0  # Baseline voltage
-alpha_n = .01 * ((10-V) / (np.exp((10-V)/10)-1))  # Equation 12
-beta_n = .125*np.exp(-V/80)  # Equation 13
-alpha_m = .1*((25-V) / (np.exp((25-V)/10)-1))  # Equation 20
-beta_m = 4*np.exp(-V/18)  # Equation 21
-alpha_h = .07*np.exp(-V/20)  # Equation 23
-beta_h = 1/(np.exp((30-V)/10)+1)  # Equation 24
-
-# Conductances over time
-n = np.empty(len(t))
-m = np.empty(len(t))
-h = np.empty(len(t))
-V = np.empty(len(t))
+Vstart = -0  # Baseline voltage
+alpha_n = .01 * ((10-Vstart) / (np.exp((10-Vstart)/10)-1))  # Equation 12
+beta_n = .125*np.exp(-Vstart/80)  # Equation 13
+alpha_m = .1*((25-Vstart) / (np.exp((25-Vstart)/10)-1))  # Equation 20
+beta_m = 4*np.exp(-Vstart/18)  # Equation 21
+alpha_h = .07*np.exp(-Vstart/20)  # Equation 23
+beta_h = 1/(np.exp((30-Vstart)/10)+1)  # Equation 24
 
 # Initial conductances
 n[0] = alpha_n/(alpha_n+beta_n)  # Equation 9
 m[0] = alpha_m/(alpha_m+beta_m)  # Equation 18
 h[0] = alpha_h/(alpha_h+beta_h)  # Equation 18
+V[0] = Vstart
 
 # Simulate
-for i in range(1, len(t)-1):
+for i in range(len(t)-1):
 
    # coefficients
     alpha_n = .01 * ((10-V[i]) / (np.exp((10-V[i])/10)-1))
@@ -73,17 +79,29 @@ for i in range(1, len(t)-1):
 # Display Results
 V = V-70  # Set resting potential to -70mv
 
-plt.figure()
+plt.figure(figsize=(8, 8))
 
-ax1 = plt.subplot(211)
-ax1.plot(t, V)
+ax1 = plt.subplot(411)
+ax1.plot(t, V, color='b')
+ax1.set_ylabel("Potential (mV)")
 
-ax2 = plt.subplot(212, sharex=ax1)
-ax2.plot(t, gK*np.power(n, 4), label='Potassium')
-ax2.plot(t, gNa*np.power(m, 3)*h, label='Sodium')
-ax2.set_ylabel("Conductance")
-ax2.set_xlabel("Time (milliseconds)")
+ax2 = plt.subplot(412)
+ax2.plot(t, I, color='r')
+ax2.set_ylabel("Stimulus")
+
+ax3 = plt.subplot(413, sharex=ax1)
+ax3.plot(t, gK*np.power(n, 4), label='K')
+ax3.plot(t, gNa*np.power(m, 3)*h, label='Na')
+ax3.set_ylabel("Conductance")
+plt.legend()
+
+ax4 = plt.subplot(414, sharex=ax1)
+ax4.plot(t, n, label='K')
+ax4.plot(t, m, label='Na')
+ax4.set_ylabel("Open State")
+ax4.set_xlabel("Time (milliseconds)")
 plt.legend()
 
 plt.tight_layout()
+plt.savefig("dev/concept3.png")
 plt.show()
