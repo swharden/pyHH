@@ -3,46 +3,58 @@
 
 ![](dev/concept4.png)
 
-## Quickstart
-The `pyhh` package provides a simple interface to the Hodgkin-Huxley model and includes tools to run simulations.
+## Usage
+The `pyhh` package includes Hodgkin-Huxley models and tools to organize simulation data. Start by creating a `HHModel` cell, customize it as desired, then feed it into a simulation. Optional arguments control the simulation length and spatial resolution.
 
 ```python
 import pyhh
 import numpy as np
+
+# customize a neuron model
+model = pyhh.HHModel()
+model.gNa = 100 # typically 120
+model.gK = 5 # typically 36
+model.EK = -35 # typically -12
+
+# customize a stimulus waveform
+stim = np.zeros(2000)
+stim[700:1300] = 50 # add a square pulse
+
+# run a simulation on the model
+sim = pyhh.Simulation(model)
+sim.Run(stimulusCurrent=stim)
+```
+
+After the simulation runs the results are stored as properties of the `Simulation` object ready to plot with a plotting library like Matplotlib:
+
+```python
 import matplotlib.pyplot as plt
 
-# customize the neuron model by supplying arguments
-sim = Simulation()
-sim.Run()
-
-# plot the data with Matplotlib
 plt.figure(figsize=(10, 6))
 
-ax1 = plt.subplot(211)
-ax1.plot(sim.times, sim.Vm, color='b')
+ax1 = plt.subplot(311)
+ax1.plot(sim.times, sim.Vm - 70, color='b')
 ax1.set_ylabel("Membrane Potential (mV)")
 ax1.set_title("Hodgkin-Huxley Spiking Neuron Model", fontSize=16)
 
-ax2 = plt.subplot(212, sharex=ax1)
-ax2.plot(sim.times, sim.StateH, label='h')
-ax2.plot(sim.times, sim.StateM, label='m')
-ax2.plot(sim.times, sim.StateN, label='n')
-ax2.set_ylabel("Open State")
-ax2.legend()
+ax2 = plt.subplot(312)
+ax2.plot(sim.times, stim, color='r')
+ax2.set_ylabel("Stimulation")
+
+ax3 = plt.subplot(313, sharex=ax1)
+ax3.plot(sim.times, sim.StateH, label='h')
+ax3.plot(sim.times, sim.StateM, label='m')
+ax3.plot(sim.times, sim.StateN, label='n')
+ax3.set_ylabel("Open State")
+ax3.set_xlabel("Simulation Time (milliseconds)")
+ax3.legend()
 
 plt.tight_layout()
 plt.savefig("tests/demo.png")
 plt.show()
-
 ```
 
 ![](tests/demo.png)
-
-## Advanced Code Examples
-
-This project is early in development. However, developers interested in viewing existing code can find somewhat functional code examples in [dev/](/dev/)
-
-![](dev/concept3.png)
 
 ## Theory
 
