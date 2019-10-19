@@ -3,7 +3,42 @@
 
 ![](dev/concept4.png)
 
-## Code Examples
+## Quickstart
+The `pyhh` package provides a simple interface to the Hodgkin-Huxley model and includes tools to run simulations.
+
+```python
+import pyhh
+import numpy as np
+import matplotlib.pyplot as plt
+
+# customize the neuron model by supplying arguments
+sim = Simulation()
+sim.Run()
+
+# plot the data with Matplotlib
+plt.figure(figsize=(10, 6))
+
+ax1 = plt.subplot(211)
+ax1.plot(sim.times, sim.Vm, color='b')
+ax1.set_ylabel("Membrane Potential (mV)")
+ax1.set_title("Hodgkin-Huxley Spiking Neuron Model", fontSize=16)
+
+ax2 = plt.subplot(212, sharex=ax1)
+ax2.plot(sim.times, sim.StateH, label='h')
+ax2.plot(sim.times, sim.StateM, label='m')
+ax2.plot(sim.times, sim.StateN, label='n')
+ax2.set_ylabel("Open State")
+ax2.legend()
+
+plt.tight_layout()
+plt.savefig("tests/demo.png")
+plt.show()
+
+```
+
+![](tests/demo.png)
+
+## Advanced Code Examples
 
 This project is early in development. However, developers interested in viewing existing code can find somewhat functional code examples in [dev/](/dev/)
 

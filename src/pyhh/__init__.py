@@ -1,0 +1,1 @@
+from pyhh.models import HHModel
