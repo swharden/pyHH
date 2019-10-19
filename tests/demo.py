@@ -49,7 +49,7 @@ if __name__ == "__main__":
     plt.figure(figsize=(10, 6))
 
     ax1 = plt.subplot(211)
-    ax1.plot(sim.times, sim.Vm, color='b')
+    ax1.plot(sim.times, sim.Vm - 70, color='b')
     ax1.set_ylabel("Membrane Potential (mV)")
     ax1.set_title("Hodgkin-Huxley Spiking Neuron Model", fontSize=16)
 
