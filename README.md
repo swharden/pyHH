@@ -1,9 +1,12 @@
 # pyHH
-**pyHH is a simple Python implementation of the Hodgkin-Huxley spiking neuron model.** While many implementations of this model exist online, pyHH strives to be the simplest to understand (and port to other languages). pyHH simulates conductances and calculates membrane voltage at discrete time points and does not require a differential equation solver.
+**pyHH is a simple Python implementation of the Hodgkin-Huxley spiking neuron model.** While many implementations of this model exist online, pyHH strives to be the simplest to understand (and port to other languages). pyHH simulates conductances and calculates membrane voltage at discrete time points so it does not require a differential equation solver.
 
 ![](dev/concept4.png)
 
-## Usage
+## Minimal Code Example
+A full Hodgkin-Huxley spiking neuron model and simulation was created in fewer than 100 lines of Python ([dev/concept4.py](dev/concept4.py)). Unlike other code examples on the internet, this implementation is object-oriented and Pythonic. When run, it produces the image above.
+
+## Python Package
 The `pyhh` package includes Hodgkin-Huxley models and tools to organize simulation data. Start by creating a `HHModel` cell, customize it as desired, then feed it into a simulation. Optional arguments control the simulation length and spatial resolution.
 
 ```python
