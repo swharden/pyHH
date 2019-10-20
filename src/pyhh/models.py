@@ -39,11 +39,11 @@ class HHModel:
 
     def _UpdateCellVoltage(self, stimulusCurrent, deltaTms):
         """calculate channel currents using the latest gate time constants"""
-        INa = np.power(self.m.state, 3) * self.gNa * \
+        self.INa = np.power(self.m.state, 3) * self.gNa * \
             self.h.state*(self.Vm-self.ENa)
-        IK = np.power(self.n.state, 4) * self.gK * (self.Vm-self.EK)
-        IKleak = self.gKleak * (self.Vm-self.EKleak)
-        Isum = stimulusCurrent - INa - IK - IKleak
+        self.IK = np.power(self.n.state, 4) * self.gK * (self.Vm-self.EK)
+        self.IKleak = self.gKleak * (self.Vm-self.EKleak)
+        Isum = stimulusCurrent - self.INa - self.IK - self.IKleak
         self.Vm += deltaTms * Isum / self.Cm
 
     def _UpdateGateStates(self, deltaTms):
@@ -52,7 +52,7 @@ class HHModel:
         self.m.update(deltaTms)
         self.h.update(deltaTms)
 
-    def iterate(self, stimulusCurrent=0, deltaTms=0.05):
+    def iterate(self, stimulusCurrent, deltaTms):
         self._UpdateGateTimeConstants(self.Vm)
         self._UpdateCellVoltage(stimulusCurrent, deltaTms)
         self._UpdateGateStates(deltaTms)
