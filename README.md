@@ -3,7 +3,7 @@
 
 ![](dev/concept4.png)
 
-## Minimal Code Example
+### Minimal Code Example
 A full Hodgkin-Huxley spiking neuron model and simulation was created in fewer than 100 lines of Python ([dev/concept4.py](dev/concept4.py)). Unlike other code examples on the internet, this implementation is object-oriented and Pythonic. When run, it produces the image above.
 
 ## Python Package
