@@ -1,5 +1,5 @@
 # pyHH
-**pyHH is a simple Python implementation of the Hodgkin-Huxley spiking neuron model.** pyHH simulates conductances and calculates membrane voltage at discrete time points so it does not require a differential equation solver. [HHSharp](https://github.com/swharden/HHSharp) is a similar project written in C#.
+**pyHH is a simple Python implementation of the Hodgkin-Huxley spiking neuron model.** pyHH simulates conductances and calculates membrane voltage at discrete time points without requiring a differential equation solver. [HHSharp](https://github.com/swharden/HHSharp) is a similar project written in C#.
 
 ![](dev/concept4.png)
 
